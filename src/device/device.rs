@@ -3,7 +3,7 @@ use libc::c_int;
 use libc::{timeval, gettimeofday};
 use nix::unistd;
 use ffi::*;
-use {Result as Res, Error, Event, event};
+use {Result as Res, event};
 
 /// The virtual device.
 pub struct Device {
