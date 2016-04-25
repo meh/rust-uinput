@@ -40,15 +40,22 @@ impl Device {
 		self.write(EV_SYN, SYN_REPORT, 0)
 	}
 
-	pub fn press<T: event::Press>(&mut self, event: T) -> Res<()> {
+	pub fn press<T: event::Press>(&mut self, event: &T) -> Res<()> {
 		self.write(event.kind(), event.code(), 1)
 	}
 
-	pub fn release<T: event::Release>(&mut self, event: T) -> Res<()> {
+	pub fn release<T: event::Release>(&mut self, event: &T) -> Res<()> {
 		self.write(event.kind(), event.code(), 0)
 	}
 
-	pub fn position<T: event::Position>(&mut self, event: T, value: i32) -> Res<()> {
+	pub fn click<T: event::Press + event::Release>(&mut self, event: &T) -> Res<()> {
+		try!(self.press(event));
+		try!(self.release(event));
+
+		Ok(())
+	}
+
+	pub fn position<T: event::Position>(&mut self, event: &T, value: i32) -> Res<()> {
 		self.write(event.kind(), event.code(), value)
 	}
 }
