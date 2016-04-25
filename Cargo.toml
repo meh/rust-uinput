@@ -1,0 +1,26 @@
+[package]
+name    = "uinput"
+version = "0.1.0"
+
+authors = ["meh. <meh@schizofreni.co>"]
+license = "WTFPL"
+
+description = "Linux uinput wrapper."
+repository  = "https://github.com/meh/rust-uinput"
+keywords    = ["linux", "input"]
+
+[dependencies]
+libc       = "0.2"
+nix        = "0.5"
+uinput-sys = "0.1"
+
+custom_derive = "0.1"
+enum_derive   = "0.1"
+
+[dependencies.libudev]
+optional = true
+version  = "0.2"
+
+[features]
+default = ["udev"]
+udev    = ["libudev"]
