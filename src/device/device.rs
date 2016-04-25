@@ -5,11 +5,13 @@ use nix::unistd;
 use ffi::*;
 use {Result as Res, Error, Event, event};
 
+/// The virtual device.
 pub struct Device {
 	fd: c_int,
 }
 
 impl Device {
+	/// Wrap a file descriptor in a `Device`.
 	pub fn new(fd: c_int) -> Self {
 		Device {
 			fd: fd
@@ -36,18 +38,22 @@ impl Device {
 		Ok(())
 	}
 
+	/// Synchronize the device.
 	pub fn synchronize(&mut self) -> Res<()> {
 		self.write(EV_SYN, SYN_REPORT, 0)
 	}
 
+	/// Send a press event.
 	pub fn press<T: event::Press>(&mut self, event: &T) -> Res<()> {
 		self.write(event.kind(), event.code(), 1)
 	}
 
+	/// Send a release event.
 	pub fn release<T: event::Release>(&mut self, event: &T) -> Res<()> {
 		self.write(event.kind(), event.code(), 0)
 	}
 
+	/// Send a press and release event.
 	pub fn click<T: event::Press + event::Release>(&mut self, event: &T) -> Res<()> {
 		try!(self.press(event));
 		try!(self.release(event));
@@ -55,6 +61,7 @@ impl Device {
 		Ok(())
 	}
 
+	/// Send a relative or absolute positioning event.
 	pub fn position<T: event::Position>(&mut self, event: &T, value: i32) -> Res<()> {
 		self.write(event.kind(), event.code(), value)
 	}

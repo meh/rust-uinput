@@ -11,22 +11,25 @@ use event::{self, Kind, Code};
 #[cfg(feature = "udev")]
 use udev;
 
+/// Device builder.
 pub struct Builder {
-	fd:   c_int,
-	def:  uinput_user_dev,
-	code: c_int,
+	fd:  c_int,
+	def: uinput_user_dev,
+	abs: Option<c_int>,
 }
 
 impl Builder {
+	/// Create a builder from the specified path.
 	pub fn open<P: AsRef<Path>>(path: P) -> Res<Self> {
 		Ok(Builder {
-			fd:   try!(fcntl::open(path.as_ref(), fcntl::O_WRONLY | fcntl::O_NONBLOCK, stat::Mode::empty())),
-			def:  unsafe { mem::zeroed() },
-			code: 0,
+			fd:  try!(fcntl::open(path.as_ref(), fcntl::O_WRONLY | fcntl::O_NONBLOCK, stat::Mode::empty())),
+			def: unsafe { mem::zeroed() },
+			abs: None,
 		})
 	}
 
 	#[cfg(feature = "udev")]
+	/// Create a builder from the default path taken from udev.
 	pub fn default() -> Res<Self> {
 		let     context    = try!(udev::Context::new());
 		let mut enumerator = try!(udev::Enumerator::new(&context));
@@ -41,10 +44,12 @@ impl Builder {
 	}
 
 	#[cfg(not(feature = "udev"))]
+	/// Create a builder from `/dev/uinput`.
 	pub fn default() -> Res<Self> {
 		Builder::open("/dev/uinput")
 	}
 
+	/// Set the name.
 	pub fn name<T: AsRef<str>>(mut self, value: T) -> Res<Self> {
 		let string = try!(CString::new(value.as_ref()));
 		let bytes  = string.as_bytes_with_nul();
@@ -59,27 +64,34 @@ impl Builder {
 		Ok(self)
 	}
 
+	/// Set the bus type.
 	pub fn bus(mut self, value: u16) -> Self {
 		self.def.id.bustype = value;
 		self
 	}
 
+	/// Set the vendor ID.
 	pub fn vendor(mut self, value: u16) -> Self {
 		self.def.id.vendor = value;
 		self
 	}
 
+	/// Set the product ID.
 	pub fn product(mut self, value: u16) -> Self {
 		self.def.id.product = value;
 		self
 	}
 
+	/// Set the version.
 	pub fn version(mut self, value: u16) -> Self {
 		self.def.id.version = value;
 		self
 	}
 
+	/// Enable the given event.
 	pub fn event<T: Into<Event>>(mut self, value: T) -> Res<Self> {
+		self.abs = None;
+
 		match value.into() {
 			Event::All => {
 				try!(self.event(Event::Keyboard(event::Keyboard::All)))
@@ -211,33 +223,38 @@ impl Builder {
 					try!(Errno::result(ui_set_absbit(self.fd, value.code())));
 				}
 
-				self.code = value.code();
+				self.abs = Some(value.code());
 
 				Ok(self)
 			}
 		}
 	}
 
+	/// Set the maximum value for the previously enabled absolute event.
 	pub fn max(mut self, value: i32) -> Self {
-		self.def.absmax[self.code as usize] = value;
+		self.def.absmax[self.abs.unwrap() as usize] = value;
 		self
 	}
 
+	/// Set the minimum value for the previously enabled absolute event.
 	pub fn min(mut self, value: i32) -> Self {
-		self.def.absmin[self.code as usize] = value;
+		self.def.absmin[self.abs.unwrap() as usize] = value;
 		self
 	}
 
+	/// Set the fuzz value for the previously enabled absolute event.
 	pub fn fuzz(mut self, value: i32) -> Self {
-		self.def.absfuzz[self.code as usize] = value;
+		self.def.absfuzz[self.abs.unwrap() as usize] = value;
 		self
 	}
 
+	/// Set the flat value for the previously enabled absolute event.
 	pub fn flat(mut self, value: i32) -> Self {
-		self.def.absflat[self.code as usize] = value;
+		self.def.absflat[self.abs.unwrap() as usize] = value;
 		self
 	}
 
+	/// Create the defined device.
 	pub fn create(self) -> Res<Device> {
 		unsafe {
 			let ptr  = &self.def as *const _ as *const u8;

@@ -29,10 +29,12 @@ pub use event::Event;
 pub mod device;
 pub use device::Device;
 
+/// Open the default uinput device.
 pub fn default() -> Result<device::Builder> {
 	device::Builder::default()
 }
 
+/// Open the specified uinput device.
 pub fn open<P: AsRef<Path>>(path: P) -> Result<device::Builder> {
 	device::Builder::open(path)
 }
