@@ -82,10 +82,8 @@ impl Builder {
 	pub fn event<T: Into<Event>>(mut self, value: T) -> Res<Self> {
 		match value.into() {
 			Event::All => {
-				try!(try!(try!(self.event(Event::Keyboard(event::Keyboard::All)))
-				    .event(Event::Controller(event::Controller::All)))
-				    .event(Event::Relative(event::Relative::All)))
-				    .event(Event::Absolute(event::Absolute::All))
+				try!(self.event(Event::Keyboard(event::Keyboard::All)))
+					.event(Event::Controller(event::Controller::All))
 			}
 
 			Event::Keyboard(value) => {
@@ -199,71 +197,23 @@ impl Builder {
 			}
 
 			Event::Relative(value) => {
-				match value {
-					event::Relative::All => {
-						let mut builder = self;
-
-						for item in event::relative::Position::iter_variants() {
-							builder = try!(builder.event(item));
-						}
-
-						for item in event::relative::Wheel::iter_variants() {
-							builder = try!(builder.event(item));
-						}
-
-						Ok(builder)
-					}
-
-					value => {
-						unsafe {
-							try!(Errno::result(ui_set_evbit(self.fd, value.kind())));
-							try!(Errno::result(ui_set_relbit(self.fd, value.code())));
-						}
-
-						Ok(self)
-					}
+				unsafe {
+					try!(Errno::result(ui_set_evbit(self.fd, value.kind())));
+					try!(Errno::result(ui_set_relbit(self.fd, value.code())));
 				}
+
+				Ok(self)
 			}
 
 			Event::Absolute(value) => {
-				match value {
-					event::Absolute::All => {
-						let mut builder = self;
-
-						for item in event::absolute::Position::iter_variants() {
-							builder = try!(builder.event(item));
-						}
-
-						for item in event::absolute::Wheel::iter_variants() {
-							builder = try!(builder.event(item));
-						}
-
-						for item in event::absolute::Hat::iter_variants() {
-							builder = try!(builder.event(item));
-						}
-
-						for item in event::absolute::Digi::iter_variants() {
-							builder = try!(builder.event(item));
-						}
-
-						for item in event::absolute::Multi::iter_variants() {
-							builder = try!(builder.event(item));
-						}
-
-						Ok(builder)
-					}
-
-					value => {
-						unsafe {
-							try!(Errno::result(ui_set_evbit(self.fd, value.kind())));
-							try!(Errno::result(ui_set_absbit(self.fd, value.code())));
-						}
-
-						self.code = value.code();
-
-						Ok(self)
-					}
+				unsafe {
+					try!(Errno::result(ui_set_evbit(self.fd, value.kind())));
+					try!(Errno::result(ui_set_absbit(self.fd, value.code())));
 				}
+
+				self.code = value.code();
+
+				Ok(self)
 			}
 		}
 	}

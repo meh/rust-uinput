@@ -5,8 +5,6 @@ use super::{Kind, Code};
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Relative {
-	All,
-
 	Position(Position),
 	Wheel(Wheel),
 }
@@ -28,8 +26,6 @@ impl Kind for Relative {
 impl Code for Relative {
 	fn code(&self) -> c_int {
 		match self {
-			&Relative::All => unreachable!(),
-
 			&Relative::Position(ref v) => v.code(),
 			&Relative::Wheel(ref v)    => v.code(),
 		}

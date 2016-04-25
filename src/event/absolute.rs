@@ -5,8 +5,6 @@ use super::{Kind, Code};
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Absolute {
-	All,
-
 	Position(Position),
 	Wheel(Wheel),
 	Hat(Hat),
@@ -31,8 +29,6 @@ impl Kind for Absolute {
 impl Code for Absolute {
 	fn code(&self) -> c_int {
 		match self {
-			&Absolute::All => unreachable!(),
-
 			&Absolute::Position(ref v) => v.code(),
 			&Absolute::Wheel(ref v)    => v.code(),
 			&Absolute::Hat(ref v)      => v.code(),
