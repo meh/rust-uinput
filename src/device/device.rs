@@ -18,7 +18,8 @@ impl Device {
 		}
 	}
 
-	fn write(&mut self, kind: c_int, code: c_int, value: c_int) -> Res<()> {
+	#[doc(hidden)]
+	pub fn write(&mut self, kind: c_int, code: c_int, value: c_int) -> Res<()> {
 		unsafe {
 			let mut event = input_event {
 				time:  timeval { tv_sec: 0, tv_usec: 0 },
