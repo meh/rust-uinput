@@ -4,6 +4,7 @@ use libc::{timeval, gettimeofday};
 use nix::unistd;
 use ffi::*;
 use {Result as Res, event};
+use event::{Kind, Code};
 
 /// The virtual device.
 pub struct Device {
@@ -42,6 +43,12 @@ impl Device {
 	/// Synchronize the device.
 	pub fn synchronize(&mut self) -> Res<()> {
 		self.write(EV_SYN, SYN_REPORT, 0)
+	}
+
+	/// Send an event.
+	pub fn send<T: Into<event::Event>>(&mut self, event: T, value: i32) -> Res<()> {
+		let event = event.into();
+		self.write(event.kind(), event.code(), value)
 	}
 
 	/// Send a press event.
