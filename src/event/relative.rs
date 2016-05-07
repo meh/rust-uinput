@@ -3,7 +3,7 @@ use ffi::*;
 use {Event};
 use super::{Kind, Code};
 
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum Relative {
 	Position(Position),
 	Wheel(Wheel),
@@ -33,7 +33,7 @@ impl Code for Relative {
 }
 
 custom_derive! {
-	#[derive(Clone, Copy, PartialEq, Eq, Debug, IterVariants(PositionVariants))]
+	#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, IterVariants(PositionVariants))]
 	pub enum Position {
 		X,
 		Y,
@@ -72,7 +72,7 @@ impl Code for Position {
 }
 
 custom_derive! {
-	#[derive(Clone, Copy, PartialEq, Eq, Debug, IterVariants(WheelVariants))]
+	#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, IterVariants(WheelVariants))]
 	pub enum Wheel {
 		Horizontal,
 		Dial,

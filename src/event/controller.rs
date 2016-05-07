@@ -3,7 +3,7 @@ use ffi::*;
 use {Event};
 use super::{Kind, Code, Press, Release};
 
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum Controller {
 	All,
 	Misc(Misc),
@@ -49,7 +49,7 @@ impl Code for Controller {
 }
 
 custom_derive! {
-	#[derive(Clone, Copy, PartialEq, Eq, Debug, IterVariants(MiscVariants))]
+	#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, IterVariants(MiscVariants))]
 	pub enum Misc {
 		_0,
 		_1,
@@ -94,7 +94,7 @@ impl Code for Misc {
 }
 
 custom_derive! {
-	#[derive(Clone, Copy, PartialEq, Eq, Debug, IterVariants(MouseVariants))]
+	#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, IterVariants(MouseVariants))]
 	pub enum Mouse {
 		Left,
 		Right,
@@ -129,7 +129,7 @@ impl Code for Mouse {
 }
 
 custom_derive! {
-	#[derive(Clone, Copy, PartialEq, Eq, Debug, IterVariants(JoyStickVariants))]
+	#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, IterVariants(JoyStickVariants))]
 	pub enum JoyStick {
 		Trigger,
 		Thumb,
@@ -183,7 +183,7 @@ impl Code for JoyStick {
 }
 
 custom_derive! {
-	#[derive(Clone, Copy, PartialEq, Eq, Debug, IterVariants(GamePadVariants))]
+	#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, IterVariants(GamePadVariants))]
 	pub enum GamePad {
 		South,
 		A,
@@ -249,7 +249,7 @@ impl Code for GamePad {
 }
 
 custom_derive! {
-	#[derive(Clone, Copy, PartialEq, Eq, Debug, IterVariants(DigiVariants))]
+	#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, IterVariants(DigiVariants))]
 	pub enum Digi {
 		Pen,
 		Rubber,
@@ -307,7 +307,7 @@ impl Code for Digi {
 }
 
 custom_derive! {
-	#[derive(Clone, Copy, PartialEq, Eq, Debug, IterVariants(WheelVariants))]
+	#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, IterVariants(WheelVariants))]
 	pub enum Wheel {
 		GearDown,
 		GearUp,
@@ -339,7 +339,7 @@ impl Code for Wheel {
 }
 
 custom_derive! {
-	#[derive(Clone, Copy, PartialEq, Eq, Debug, IterVariants(DPadVariants))]
+	#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, IterVariants(DPadVariants))]
 	pub enum DPad {
 		Up,
 		Down,
@@ -375,7 +375,7 @@ impl Code for DPad {
 }
 
 custom_derive! {
-	#[derive(Clone, Copy, PartialEq, Eq, Debug, IterVariants(TriggerHappyVariants))]
+	#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, IterVariants(TriggerHappyVariants))]
 	pub enum TriggerHappy {
 		_1,
 		_2,

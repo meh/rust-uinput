@@ -22,7 +22,7 @@ pub trait Release: Kind + Code { }
 pub trait Position: Kind + Code { }
 
 /// All supported events.
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum Event {
 	All,
 
