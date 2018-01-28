@@ -78,7 +78,7 @@ impl Device {
 impl Drop for Device {
 	fn drop(&mut self) {
 		unsafe {
-			ui_dev_destroy(self.fd);
+			let _ = ui_dev_destroy(self.fd);
 		}
 	}
 }
