@@ -2,8 +2,10 @@ use std::path::Path;
 use std::{mem, slice};
 use std::ffi::CString;
 use libc::c_int;
-use nix::{self, fcntl, unistd, Errno};
+use nix::{self, fcntl, unistd};
+use nix::fcntl::OFlag;
 use nix::sys::stat;
+use nix::errno::Errno;
 use ffi::*;
 use {Result as Res, Error, Device, Event};
 use event::{self, Kind, Code};
@@ -22,7 +24,7 @@ impl Builder {
 	/// Create a builder from the specified path.
 	pub fn open<P: AsRef<Path>>(path: P) -> Res<Self> {
 		Ok(Builder {
-			fd:  try!(fcntl::open(path.as_ref(), fcntl::O_WRONLY | fcntl::O_NONBLOCK, stat::Mode::empty())),
+			fd:  try!(fcntl::open(path.as_ref(), OFlag::O_WRONLY | OFlag::O_NONBLOCK, stat::Mode::empty())),
 			def: unsafe { mem::zeroed() },
 			abs: None,
 		})
@@ -55,7 +57,7 @@ impl Builder {
 		let bytes  = string.as_bytes_with_nul();
 
 		if bytes.len() > UINPUT_MAX_NAME_SIZE as usize {
-			try!(Err(nix::Error::from_errno(nix::Errno::EINVAL)));
+			try!(Err(nix::Error::from_errno(Errno::EINVAL)));
 		}
 
 		(&mut self.def.name)[..bytes.len()]
@@ -261,7 +263,7 @@ impl Builder {
 			let size = mem::size_of_val(&self.def);
 
 			try!(unistd::write(self.fd, slice::from_raw_parts(ptr, size)));
-			try!(Errno::result(ui_dev_create(self.fd)));
+			try!(ui_dev_create(self.fd));
 		}
 
 		Ok(Device::new(self.fd))
