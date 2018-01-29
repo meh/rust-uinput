@@ -2,7 +2,8 @@ use std::path::Path;
 use std::{mem, slice};
 use std::ffi::CString;
 use libc::c_int;
-use nix::{self, fcntl, unistd, Errno};
+use nix::{self, fcntl, unistd};
+use nix::errno::Errno;
 use nix::sys::stat;
 use ffi::*;
 use {Result as Res, Error, Device, Event};
@@ -22,7 +23,7 @@ impl Builder {
 	/// Create a builder from the specified path.
 	pub fn open<P: AsRef<Path>>(path: P) -> Res<Self> {
 		Ok(Builder {
-			fd:  try!(fcntl::open(path.as_ref(), fcntl::O_WRONLY | fcntl::O_NONBLOCK, stat::Mode::empty())),
+			fd:  try!(fcntl::open(path.as_ref(), fcntl::OFlag::O_WRONLY | fcntl::OFlag::O_NONBLOCK, stat::Mode::empty())),
 			def: unsafe { mem::zeroed() },
 			abs: None,
 		})
@@ -55,7 +56,7 @@ impl Builder {
 		let bytes  = string.as_bytes_with_nul();
 
 		if bytes.len() > UINPUT_MAX_NAME_SIZE as usize {
-			try!(Err(nix::Error::from_errno(nix::Errno::EINVAL)));
+			try!(Err(nix::Error::from_errno(Errno::EINVAL)));
 		}
 
 		(&mut self.def.name)[..bytes.len()]
