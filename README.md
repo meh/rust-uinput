@@ -14,7 +14,7 @@ use std::thread;
 use std::time::Duration;
 
 fn main() {
-	let mut device = uinput::default().unwrap()
+	let device = uinput::default().unwrap()
 		.name("test").unwrap()
 		.event(uinput::event::Keyboard::All).unwrap()
 		.create().unwrap();
