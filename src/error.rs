@@ -1,5 +1,4 @@
 use std::fmt;
-use std::error;
 use std::ffi;
 use nix;
 
@@ -44,25 +43,8 @@ impl From<udev::Error> for Error {
 
 impl fmt::Display for Error {
 	fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-		f.write_str(error::Error::description(self))
+		f.write_str(format!("{}", &self).as_str())
 	}
 }
 
-impl error::Error for Error {
-	fn description(&self) -> &str {
-		match self {
-			&Error::Nix(ref err) =>
-				err.description(),
 
-			&Error::Nul(ref err) =>
-				err.description(),
-
-			#[cfg(feature = "udev")]
-			&Error::Udev(ref err) =>
-				err.description(),
-
-			&Error::NotFound =>
-				"Device not found.",
-		}
-	}
-}
