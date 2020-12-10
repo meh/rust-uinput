@@ -43,7 +43,7 @@ impl From<udev::Error> for Error {
 
 impl fmt::Display for Error {
 	fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-		f.write_str(format!("{}", &self).as_str())
+		f.write_str(format!("{}", self).as_str())
 	}
 }
 
