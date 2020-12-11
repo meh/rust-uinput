@@ -44,25 +44,37 @@ impl From<udev::Error> for Error {
 
 impl fmt::Display for Error {
 	fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-		f.write_str(format!("{}", self).as_str())
+		match self {
+			Error::Nix(err) => {
+				f.write_str(format!("{}", err).as_str())
+			},
+			
+			Error::Nul(err) => {
+				f.write_str(format!("{}", err).as_str())
+			},
+			
+			#[cfg(feature="udev")]
+			Error::Udev(err) => {
+				f.write_str(format!("{}", err).as_str())
+			},
+			
+			Error::NotFound => f.write_str("The uinput file could not be found."),
+		}
 	}
 }
 
 impl error::Error for Error {
-	fn description(&self) -> &str {
+	fn source(&self) -> Option<&(dyn error::Error + 'static)> {
 		match self {
-			&Error::Nix(ref err) =>
-				err.description(),
-
-			&Error::Nul(ref err) =>
-				err.description(),
-
-			#[cfg(feature = "udev")]
-			&Error::Udev(ref err) =>
-				err.description(),
-
-			&Error::NotFound =>
-				"Device not found.",
+			Error::Nix(err) => Some(err),
+			
+			Error::Nul(err) => Some(err),
+			
+			#[cfg(feature="udev")]
+			Error::Udev(err) => Some(err),
+			
+			// NotFound does not have a source to refer to
+			Error::NotFound => None,
 		}
 	}
 }
