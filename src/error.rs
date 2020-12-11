@@ -49,7 +49,7 @@ impl fmt::Display for Error {
 			Error::Nul(err) => write!(f, "{}", err),
 			#[cfg(feature="udev")]
 			Error::Udev(err) => write!(f, "{}", err),
-			Error::NotFound => write!("The uinput file could not be found."),
+			Error::NotFound => write!(f, "The uinput file could not be found."),
 		}
 	}
 }
