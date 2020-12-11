@@ -45,20 +45,11 @@ impl From<udev::Error> for Error {
 impl fmt::Display for Error {
 	fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
 		match self {
-			Error::Nix(err) => {
-				f.write_str(format!("{}", err).as_str())
-			},
-			
-			Error::Nul(err) => {
-				f.write_str(format!("{}", err).as_str())
-			},
-			
+			Error::Nix(err) => write!(f, "{}", err),
+			Error::Nul(err) => write!(f, "{}", err),
 			#[cfg(feature="udev")]
-			Error::Udev(err) => {
-				f.write_str(format!("{}", err).as_str())
-			},
-			
-			Error::NotFound => f.write_str("The uinput file could not be found."),
+			Error::Udev(err) => write!(f, "{}", err),
+			Error::NotFound => write!("The uinput file could not be found."),
 		}
 	}
 }
