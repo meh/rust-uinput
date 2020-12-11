@@ -1,4 +1,5 @@
 use std::fmt;
+use std::error;
 use std::ffi;
 use nix;
 
@@ -47,4 +48,21 @@ impl fmt::Display for Error {
 	}
 }
 
+impl error::Error for Error {
+	fn description(&self) -> &str {
+		match self {
+			&Error::Nix(ref err) =>
+				err.description(),
 
+			&Error::Nul(ref err) =>
+				err.description(),
+
+			#[cfg(feature = "udev")]
+			&Error::Udev(ref err) =>
+				err.description(),
+
+			&Error::NotFound =>
+				"Device not found.",
+		}
+	}
+}
