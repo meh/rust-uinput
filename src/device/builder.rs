@@ -2,7 +2,7 @@ use std::path::Path;
 use std::{mem, slice};
 use std::ffi::CString;
 use libc::c_int;
-use nix::{self, fcntl, unistd};
+use nix::{fcntl, unistd};
 use nix::errno::Errno;
 use nix::sys::stat;
 use ffi::*;
@@ -56,7 +56,7 @@ impl Builder {
 		let bytes  = string.as_bytes_with_nul();
 
 		if bytes.len() > UINPUT_MAX_NAME_SIZE as usize {
-			Err(nix::Error::from_errno(Errno::EINVAL))?;
+			Err(nix::Error::EINVAL)?;
 		}
 
 		(&mut self.def.name)[..bytes.len()]
