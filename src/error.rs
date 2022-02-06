@@ -44,15 +44,15 @@ impl From<udev::Error> for Error {
 
 impl fmt::Display for Error {
 	fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-		match self {
-			&Error::Nix(ref err) => write!(f, "{}", err),
+		match *self {
+			Error::Nix(ref err) => write!(f, "{}", err),
 
-			&Error::Nul(ref err) => write!(f, "{}", err),
+			Error::Nul(ref err) => write!(f, "{}", err),
 
 			#[cfg(feature = "udev")]
-			&Error::Udev(ref err) => write!(f, "{}", err),
+			Error::Udev(ref err) => write!(f, "{}", err),
 
-			&Error::NotFound =>  write!(f, "Device not found.")
+			Error::NotFound =>  write!(f, "Device not found.")
 		}
 	}
 }

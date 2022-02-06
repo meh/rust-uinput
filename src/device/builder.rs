@@ -56,7 +56,7 @@ impl Builder {
 		let bytes  = string.as_bytes_with_nul();
 
 		if bytes.len() > UINPUT_MAX_NAME_SIZE as usize {
-			Err(nix::Error::EINVAL)?;
+			return Err(nix::Error::EINVAL.into())
 		}
 
 		(&mut self.def.name)[..bytes.len()]

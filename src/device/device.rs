@@ -15,7 +15,7 @@ impl Device {
 	/// Wrap a file descriptor in a `Device`.
 	pub fn new(fd: c_int) -> Self {
 		Device {
-			fd: fd
+			fd
 		}
 	}
 

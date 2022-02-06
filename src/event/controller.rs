@@ -16,9 +16,9 @@ pub enum Controller {
 	TriggerHappy(TriggerHappy),
 }
 
-impl Into<Event> for Controller {
-	fn into(self) -> Event {
-		Event::Controller(self)
+impl From<Controller> for Event {
+	fn from(val: Controller) -> Self {
+		Event::Controller(val)
 	}
 }
 
@@ -33,17 +33,17 @@ impl Kind for Controller {
 
 impl Code for Controller {
 	fn code(&self) -> c_int {
-		match self {
-			&Controller::All => unreachable!(),
+		match *self {
+			Controller::All => unreachable!(),
 
-			&Controller::Misc(ref v)         => v.code(),
-			&Controller::Mouse(ref v)        => v.code(),
-			&Controller::JoyStick(ref v)     => v.code(),
-			&Controller::GamePad(ref v)      => v.code(),
-			&Controller::Digi(ref v)         => v.code(),
-			&Controller::Wheel(ref v)        => v.code(),
-			&Controller::DPad(ref v)         => v.code(),
-			&Controller::TriggerHappy(ref v) => v.code(),
+			Controller::Misc(ref v)         => v.code(),
+			Controller::Mouse(ref v)        => v.code(),
+			Controller::JoyStick(ref v)     => v.code(),
+			Controller::GamePad(ref v)      => v.code(),
+			Controller::Digi(ref v)         => v.code(),
+			Controller::Wheel(ref v)        => v.code(),
+			Controller::DPad(ref v)         => v.code(),
+			Controller::TriggerHappy(ref v) => v.code(),
 		}
 	}
 }
@@ -64,9 +64,9 @@ custom_derive! {
 	}
 }
 
-impl Into<Event> for Misc {
-	fn into(self) -> Event {
-		Event::Controller(Controller::Misc(self))
+impl From<Misc> for Event {
+	fn from(val: Misc) -> Self {
+		Event::Controller(Controller::Misc(val))
 	}
 }
 
@@ -78,17 +78,17 @@ impl Kind for Misc {
 
 impl Code for Misc {
 	fn code(&self) -> c_int {
-		match self {
-			&Misc::_0 => BTN_0,
-			&Misc::_1 => BTN_1,
-			&Misc::_2 => BTN_2,
-			&Misc::_3 => BTN_3,
-			&Misc::_4 => BTN_4,
-			&Misc::_5 => BTN_5,
-			&Misc::_6 => BTN_6,
-			&Misc::_7 => BTN_7,
-			&Misc::_8 => BTN_8,
-			&Misc::_9 => BTN_9,
+		match *self {
+			Misc::_0 => BTN_0,
+			Misc::_1 => BTN_1,
+			Misc::_2 => BTN_2,
+			Misc::_3 => BTN_3,
+			Misc::_4 => BTN_4,
+			Misc::_5 => BTN_5,
+			Misc::_6 => BTN_6,
+			Misc::_7 => BTN_7,
+			Misc::_8 => BTN_8,
+			Misc::_9 => BTN_9,
 		}
 	}
 }
@@ -107,23 +107,23 @@ custom_derive! {
 	}
 }
 
-impl Into<Event> for Mouse {
-	fn into(self) -> Event {
-		Event::Controller(Controller::Mouse(self))
+impl From<Mouse> for Event {
+	fn from(val: Mouse) -> Self {
+		Event::Controller(Controller::Mouse(val))
 	}
 }
 
 impl Code for Mouse {
 	fn code(&self) -> c_int {
-		match self {
-			&Mouse::Left    => BTN_LEFT,
-			&Mouse::Right   => BTN_RIGHT,
-			&Mouse::Middle  => BTN_MIDDLE,
-			&Mouse::Side    => BTN_SIDE,
-			&Mouse::Extra   => BTN_EXTRA,
-			&Mouse::Forward => BTN_FORWARD,
-			&Mouse::Back    => BTN_BACK,
-			&Mouse::Task    => BTN_TASK,
+		match *self {
+			Mouse::Left    => BTN_LEFT,
+			Mouse::Right   => BTN_RIGHT,
+			Mouse::Middle  => BTN_MIDDLE,
+			Mouse::Side    => BTN_SIDE,
+			Mouse::Extra   => BTN_EXTRA,
+			Mouse::Forward => BTN_FORWARD,
+			Mouse::Back    => BTN_BACK,
+			Mouse::Task    => BTN_TASK,
 		}
 	}
 }
@@ -147,9 +147,9 @@ custom_derive! {
 	}
 }
 
-impl Into<Event> for JoyStick {
-	fn into(self) -> Event {
-		Event::Controller(Controller::JoyStick(self))
+impl From<JoyStick> for Event {
+	fn from(val: JoyStick) -> Self {
+		Event::Controller(Controller::JoyStick(val))
 	}
 }
 
@@ -164,20 +164,20 @@ impl Kind for JoyStick {
 
 impl Code for JoyStick {
 	fn code(&self) -> c_int {
-		match self {
-			&JoyStick::Trigger => BTN_TRIGGER,
-			&JoyStick::Thumb   => BTN_THUMB,
-			&JoyStick::Thumb2  => BTN_THUMB2,
-			&JoyStick::Top     => BTN_TOP,
-			&JoyStick::Top2    => BTN_TOP2,
-			&JoyStick::Pinkie  => BTN_PINKIE,
-			&JoyStick::Base    => BTN_BASE,
-			&JoyStick::Base2   => BTN_BASE2,
-			&JoyStick::Base3   => BTN_BASE3,
-			&JoyStick::Base4   => BTN_BASE4,
-			&JoyStick::Base5   => BTN_BASE5,
-			&JoyStick::Base6   => BTN_BASE6,
-			&JoyStick::Dead    => BTN_DEAD,
+		match *self {
+			JoyStick::Trigger => BTN_TRIGGER,
+			JoyStick::Thumb   => BTN_THUMB,
+			JoyStick::Thumb2  => BTN_THUMB2,
+			JoyStick::Top     => BTN_TOP,
+			JoyStick::Top2    => BTN_TOP2,
+			JoyStick::Pinkie  => BTN_PINKIE,
+			JoyStick::Base    => BTN_BASE,
+			JoyStick::Base2   => BTN_BASE2,
+			JoyStick::Base3   => BTN_BASE3,
+			JoyStick::Base4   => BTN_BASE4,
+			JoyStick::Base5   => BTN_BASE5,
+			JoyStick::Base6   => BTN_BASE6,
+			JoyStick::Dead    => BTN_DEAD,
 		}
 	}
 }
@@ -207,9 +207,9 @@ custom_derive! {
 	}
 }
 
-impl Into<Event> for GamePad {
-	fn into(self) -> Event {
-		Event::Controller(Controller::GamePad(self))
+impl From<GamePad> for Event {
+	fn from(val: GamePad) -> Self {
+		Event::Controller(Controller::GamePad(val))
 	}
 }
 
@@ -224,26 +224,26 @@ impl Kind for GamePad {
 
 impl Code for GamePad {
 	fn code(&self) -> c_int {
-		match self {
-			&GamePad::South  => BTN_SOUTH,
-			&GamePad::A      => BTN_A,
-			&GamePad::East   => BTN_EAST,
-			&GamePad::B      => BTN_B,
-			&GamePad::C      => BTN_C,
-			&GamePad::North  => BTN_NORTH,
-			&GamePad::X      => BTN_X,
-			&GamePad::West   => BTN_WEST,
-			&GamePad::Y      => BTN_Y,
-			&GamePad::Z      => BTN_Z,
-			&GamePad::TL     => BTN_TL,
-			&GamePad::TR     => BTN_TR,
-			&GamePad::TL2    => BTN_TL2,
-			&GamePad::TR2    => BTN_TR2,
-			&GamePad::Select => BTN_SELECT,
-			&GamePad::Start  => BTN_START,
-			&GamePad::Mode   => BTN_MODE,
-			&GamePad::ThumbL => BTN_THUMBL,
-			&GamePad::ThumbR => BTN_THUMBR,
+		match *self {
+			GamePad::South  => BTN_SOUTH,
+			GamePad::A      => BTN_A,
+			GamePad::East   => BTN_EAST,
+			GamePad::B      => BTN_B,
+			GamePad::C      => BTN_C,
+			GamePad::North  => BTN_NORTH,
+			GamePad::X      => BTN_X,
+			GamePad::West   => BTN_WEST,
+			GamePad::Y      => BTN_Y,
+			GamePad::Z      => BTN_Z,
+			GamePad::TL     => BTN_TL,
+			GamePad::TR     => BTN_TR,
+			GamePad::TL2    => BTN_TL2,
+			GamePad::TR2    => BTN_TR2,
+			GamePad::Select => BTN_SELECT,
+			GamePad::Start  => BTN_START,
+			GamePad::Mode   => BTN_MODE,
+			GamePad::ThumbL => BTN_THUMBL,
+			GamePad::ThumbR => BTN_THUMBR,
 		}
 	}
 }
@@ -269,9 +269,9 @@ custom_derive! {
 	}
 }
 
-impl Into<Event> for Digi {
-	fn into(self) -> Event {
-		Event::Controller(Controller::Digi(self))
+impl From<Digi> for Event {
+	fn from(val: Digi) -> Self {
+		Event::Controller(Controller::Digi(val))
 	}
 }
 
@@ -286,22 +286,22 @@ impl Kind for Digi {
 
 impl Code for Digi {
 	fn code(&self) -> c_int {
-		match self {
-			&Digi::Pen       => BTN_TOOL_PEN,
-			&Digi::Rubber    => BTN_TOOL_RUBBER,
-			&Digi::Brush     => BTN_TOOL_BRUSH,
-			&Digi::Pencil    => BTN_TOOL_PENCIL,
-			&Digi::AirBrush  => BTN_TOOL_AIRBRUSH,
-			&Digi::Finger    => BTN_TOOL_FINGER,
-			&Digi::Mouse     => BTN_TOOL_MOUSE,
-			&Digi::Lens      => BTN_TOOL_LENS,
-			&Digi::QuintTap  => BTN_TOOL_QUINTTAP,
-			&Digi::Touch     => BTN_TOUCH,
-			&Digi::Stylus    => BTN_STYLUS,
-			&Digi::Stylus2   => BTN_STYLUS2,
-			&Digi::DoubleTap => BTN_TOOL_DOUBLETAP,
-			&Digi::TripleTap => BTN_TOOL_TRIPLETAP,
-			&Digi::QuadTap   => BTN_TOOL_QUADTAP,
+		match *self {
+			Digi::Pen       => BTN_TOOL_PEN,
+			Digi::Rubber    => BTN_TOOL_RUBBER,
+			Digi::Brush     => BTN_TOOL_BRUSH,
+			Digi::Pencil    => BTN_TOOL_PENCIL,
+			Digi::AirBrush  => BTN_TOOL_AIRBRUSH,
+			Digi::Finger    => BTN_TOOL_FINGER,
+			Digi::Mouse     => BTN_TOOL_MOUSE,
+			Digi::Lens      => BTN_TOOL_LENS,
+			Digi::QuintTap  => BTN_TOOL_QUINTTAP,
+			Digi::Touch     => BTN_TOUCH,
+			Digi::Stylus    => BTN_STYLUS,
+			Digi::Stylus2   => BTN_STYLUS2,
+			Digi::DoubleTap => BTN_TOOL_DOUBLETAP,
+			Digi::TripleTap => BTN_TOOL_TRIPLETAP,
+			Digi::QuadTap   => BTN_TOOL_QUADTAP,
 		}
 	}
 }
@@ -314,9 +314,9 @@ custom_derive! {
 	}
 }
 
-impl Into<Event> for Wheel {
-	fn into(self) -> Event {
-		Event::Controller(Controller::Wheel(self))
+impl From<Wheel> for Event {
+	fn from(val: Wheel) -> Self {
+		Event::Controller(Controller::Wheel(val))
 	}
 }
 
@@ -331,9 +331,9 @@ impl Kind for Wheel {
 
 impl Code for Wheel {
 	fn code(&self) -> c_int {
-		match self {
-			&Wheel::GearDown => BTN_GEAR_DOWN,
-			&Wheel::GearUp   => BTN_GEAR_UP,
+		match *self {
+			Wheel::GearDown => BTN_GEAR_DOWN,
+			Wheel::GearUp   => BTN_GEAR_UP,
 		}
 	}
 }
@@ -348,9 +348,9 @@ custom_derive! {
 	}
 }
 
-impl Into<Event> for DPad {
-	fn into(self) -> Event {
-		Event::Controller(Controller::DPad(self))
+impl From<DPad> for Event {
+	fn from(val: DPad) -> Self {
+		Event::Controller(Controller::DPad(val))
 	}
 }
 
@@ -365,11 +365,11 @@ impl Kind for DPad {
 
 impl Code for DPad {
 	fn code(&self) -> c_int {
-		match self {
-			&DPad::Up    => BTN_DPAD_UP,
-			&DPad::Down  => BTN_DPAD_DOWN,
-			&DPad::Left  => BTN_DPAD_LEFT,
-			&DPad::Right => BTN_DPAD_RIGHT,
+		match *self {
+			DPad::Up    => BTN_DPAD_UP,
+			DPad::Down  => BTN_DPAD_DOWN,
+			DPad::Left  => BTN_DPAD_LEFT,
+			DPad::Right => BTN_DPAD_RIGHT,
 		}
 	}
 }
@@ -420,9 +420,9 @@ custom_derive! {
 	}
 }
 
-impl Into<Event> for TriggerHappy {
-	fn into(self) -> Event {
-		Event::Controller(Controller::TriggerHappy(self))
+impl From<TriggerHappy> for Event {
+	fn from(val: TriggerHappy) -> Self {
+		Event::Controller(Controller::TriggerHappy(val))
 	}
 }
 
@@ -437,47 +437,47 @@ impl Kind for TriggerHappy {
 
 impl Code for TriggerHappy {
 	fn code(&self) -> c_int {
-		match self {
-			&TriggerHappy::_1  => BTN_TRIGGER_HAPPY1,
-			&TriggerHappy::_2  => BTN_TRIGGER_HAPPY2,
-			&TriggerHappy::_3  => BTN_TRIGGER_HAPPY3,
-			&TriggerHappy::_4  => BTN_TRIGGER_HAPPY4,
-			&TriggerHappy::_5  => BTN_TRIGGER_HAPPY5,
-			&TriggerHappy::_6  => BTN_TRIGGER_HAPPY6,
-			&TriggerHappy::_7  => BTN_TRIGGER_HAPPY7,
-			&TriggerHappy::_8  => BTN_TRIGGER_HAPPY8,
-			&TriggerHappy::_9  => BTN_TRIGGER_HAPPY9,
-			&TriggerHappy::_10 => BTN_TRIGGER_HAPPY10,
-			&TriggerHappy::_11 => BTN_TRIGGER_HAPPY11,
-			&TriggerHappy::_12 => BTN_TRIGGER_HAPPY12,
-			&TriggerHappy::_13 => BTN_TRIGGER_HAPPY13,
-			&TriggerHappy::_14 => BTN_TRIGGER_HAPPY14,
-			&TriggerHappy::_15 => BTN_TRIGGER_HAPPY15,
-			&TriggerHappy::_16 => BTN_TRIGGER_HAPPY16,
-			&TriggerHappy::_17 => BTN_TRIGGER_HAPPY17,
-			&TriggerHappy::_18 => BTN_TRIGGER_HAPPY18,
-			&TriggerHappy::_19 => BTN_TRIGGER_HAPPY19,
-			&TriggerHappy::_20 => BTN_TRIGGER_HAPPY20,
-			&TriggerHappy::_21 => BTN_TRIGGER_HAPPY21,
-			&TriggerHappy::_22 => BTN_TRIGGER_HAPPY22,
-			&TriggerHappy::_23 => BTN_TRIGGER_HAPPY23,
-			&TriggerHappy::_24 => BTN_TRIGGER_HAPPY24,
-			&TriggerHappy::_25 => BTN_TRIGGER_HAPPY25,
-			&TriggerHappy::_26 => BTN_TRIGGER_HAPPY26,
-			&TriggerHappy::_27 => BTN_TRIGGER_HAPPY27,
-			&TriggerHappy::_28 => BTN_TRIGGER_HAPPY28,
-			&TriggerHappy::_29 => BTN_TRIGGER_HAPPY29,
-			&TriggerHappy::_30 => BTN_TRIGGER_HAPPY30,
-			&TriggerHappy::_31 => BTN_TRIGGER_HAPPY31,
-			&TriggerHappy::_32 => BTN_TRIGGER_HAPPY32,
-			&TriggerHappy::_33 => BTN_TRIGGER_HAPPY33,
-			&TriggerHappy::_34 => BTN_TRIGGER_HAPPY34,
-			&TriggerHappy::_35 => BTN_TRIGGER_HAPPY35,
-			&TriggerHappy::_36 => BTN_TRIGGER_HAPPY36,
-			&TriggerHappy::_37 => BTN_TRIGGER_HAPPY37,
-			&TriggerHappy::_38 => BTN_TRIGGER_HAPPY38,
-			&TriggerHappy::_39 => BTN_TRIGGER_HAPPY39,
-			&TriggerHappy::_40 => BTN_TRIGGER_HAPPY40,
+		match *self {
+			TriggerHappy::_1  => BTN_TRIGGER_HAPPY1,
+			TriggerHappy::_2  => BTN_TRIGGER_HAPPY2,
+			TriggerHappy::_3  => BTN_TRIGGER_HAPPY3,
+			TriggerHappy::_4  => BTN_TRIGGER_HAPPY4,
+			TriggerHappy::_5  => BTN_TRIGGER_HAPPY5,
+			TriggerHappy::_6  => BTN_TRIGGER_HAPPY6,
+			TriggerHappy::_7  => BTN_TRIGGER_HAPPY7,
+			TriggerHappy::_8  => BTN_TRIGGER_HAPPY8,
+			TriggerHappy::_9  => BTN_TRIGGER_HAPPY9,
+			TriggerHappy::_10 => BTN_TRIGGER_HAPPY10,
+			TriggerHappy::_11 => BTN_TRIGGER_HAPPY11,
+			TriggerHappy::_12 => BTN_TRIGGER_HAPPY12,
+			TriggerHappy::_13 => BTN_TRIGGER_HAPPY13,
+			TriggerHappy::_14 => BTN_TRIGGER_HAPPY14,
+			TriggerHappy::_15 => BTN_TRIGGER_HAPPY15,
+			TriggerHappy::_16 => BTN_TRIGGER_HAPPY16,
+			TriggerHappy::_17 => BTN_TRIGGER_HAPPY17,
+			TriggerHappy::_18 => BTN_TRIGGER_HAPPY18,
+			TriggerHappy::_19 => BTN_TRIGGER_HAPPY19,
+			TriggerHappy::_20 => BTN_TRIGGER_HAPPY20,
+			TriggerHappy::_21 => BTN_TRIGGER_HAPPY21,
+			TriggerHappy::_22 => BTN_TRIGGER_HAPPY22,
+			TriggerHappy::_23 => BTN_TRIGGER_HAPPY23,
+			TriggerHappy::_24 => BTN_TRIGGER_HAPPY24,
+			TriggerHappy::_25 => BTN_TRIGGER_HAPPY25,
+			TriggerHappy::_26 => BTN_TRIGGER_HAPPY26,
+			TriggerHappy::_27 => BTN_TRIGGER_HAPPY27,
+			TriggerHappy::_28 => BTN_TRIGGER_HAPPY28,
+			TriggerHappy::_29 => BTN_TRIGGER_HAPPY29,
+			TriggerHappy::_30 => BTN_TRIGGER_HAPPY30,
+			TriggerHappy::_31 => BTN_TRIGGER_HAPPY31,
+			TriggerHappy::_32 => BTN_TRIGGER_HAPPY32,
+			TriggerHappy::_33 => BTN_TRIGGER_HAPPY33,
+			TriggerHappy::_34 => BTN_TRIGGER_HAPPY34,
+			TriggerHappy::_35 => BTN_TRIGGER_HAPPY35,
+			TriggerHappy::_36 => BTN_TRIGGER_HAPPY36,
+			TriggerHappy::_37 => BTN_TRIGGER_HAPPY37,
+			TriggerHappy::_38 => BTN_TRIGGER_HAPPY38,
+			TriggerHappy::_39 => BTN_TRIGGER_HAPPY39,
+			TriggerHappy::_40 => BTN_TRIGGER_HAPPY40,
 		}
 	}
 }
