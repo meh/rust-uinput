@@ -12,9 +12,9 @@ pub enum Absolute {
 	Multi(Multi),
 }
 
-impl Into<Event> for Absolute {
-	fn into(self) -> Event {
-		Event::Absolute(self)
+impl From<Absolute> for Event {
+	fn from(val: Absolute) -> Self {
+		Event::Absolute(val)
 	}
 }
 
@@ -28,12 +28,12 @@ impl Kind for Absolute {
 
 impl Code for Absolute {
 	fn code(&self) -> c_int {
-		match self {
-			&Absolute::Position(ref v) => v.code(),
-			&Absolute::Wheel(ref v)    => v.code(),
-			&Absolute::Hat(ref v)      => v.code(),
-			&Absolute::Digi(ref v)     => v.code(),
-			&Absolute::Multi(ref v)    => v.code(),
+		match *self {
+			Absolute::Position(ref v) => v.code(),
+			Absolute::Wheel(ref v)    => v.code(),
+			Absolute::Hat(ref v)      => v.code(),
+			Absolute::Digi(ref v)     => v.code(),
+			Absolute::Multi(ref v)    => v.code(),
 		}
 	}
 }
@@ -50,9 +50,9 @@ custom_derive! {
 	}
 }
 
-impl Into<Event> for Position {
-	fn into(self) -> Event {
-		Event::Absolute(Absolute::Position(self))
+impl From<Position> for Event {
+	fn from(val: Position) -> Self {
+		Event::Absolute(Absolute::Position(val))
 	}
 }
 
@@ -66,13 +66,13 @@ impl Kind for Position {
 
 impl Code for Position {
 	fn code(&self) -> c_int {
-		match self {
-			&Position::X  => ABS_X,
-			&Position::Y  => ABS_Y,
-			&Position::Z  => ABS_Z,
-			&Position::RX => ABS_RX,
-			&Position::RY => ABS_RY,
-			&Position::RZ => ABS_RZ,
+		match *self {
+			Position::X  => ABS_X,
+			Position::Y  => ABS_Y,
+			Position::Z  => ABS_Z,
+			Position::RX => ABS_RX,
+			Position::RY => ABS_RY,
+			Position::RZ => ABS_RZ,
 		}
 	}
 }
@@ -88,9 +88,9 @@ custom_derive! {
 	}
 }
 
-impl Into<Event> for Wheel {
-	fn into(self) -> Event {
-		Event::Absolute(Absolute::Wheel(self))
+impl From<Wheel> for Event {
+	fn from(val: Wheel) -> Self {
+		Event::Absolute(Absolute::Wheel(val))
 	}
 }
 
@@ -104,12 +104,12 @@ impl Kind for Wheel {
 
 impl Code for Wheel {
 	fn code(&self) -> c_int {
-		match self {
-			&Wheel::Throttle => ABS_THROTTLE,
-			&Wheel::Rudder   => ABS_RUDDER,
-			&Wheel::Position => ABS_WHEEL,
-			&Wheel::Gas      => ABS_GAS,
-			&Wheel::Brake    => ABS_BRAKE,
+		match *self {
+			Wheel::Throttle => ABS_THROTTLE,
+			Wheel::Rudder   => ABS_RUDDER,
+			Wheel::Position => ABS_WHEEL,
+			Wheel::Gas      => ABS_GAS,
+			Wheel::Brake    => ABS_BRAKE,
 		}
 	}
 }
@@ -128,9 +128,9 @@ custom_derive! {
 	}
 }
 
-impl Into<Event> for Hat {
-	fn into(self) -> Event {
-		Event::Absolute(Absolute::Hat(self))
+impl From<Hat> for Event {
+	fn from(val: Hat) -> Self {
+		Event::Absolute(Absolute::Hat(val))
 	}
 }
 
@@ -144,15 +144,15 @@ impl Kind for Hat {
 
 impl Code for Hat {
 	fn code(&self) -> c_int {
-		match self {
-			&Hat::X0 => ABS_HAT0X,
-			&Hat::Y0 => ABS_HAT0Y,
-			&Hat::X1 => ABS_HAT1X,
-			&Hat::Y1 => ABS_HAT1Y,
-			&Hat::X2 => ABS_HAT2X,
-			&Hat::Y2 => ABS_HAT2Y,
-			&Hat::X3 => ABS_HAT3X,
-			&Hat::Y3 => ABS_HAT3Y,
+		match *self {
+			Hat::X0 => ABS_HAT0X,
+			Hat::Y0 => ABS_HAT0Y,
+			Hat::X1 => ABS_HAT1X,
+			Hat::Y1 => ABS_HAT1Y,
+			Hat::X2 => ABS_HAT2X,
+			Hat::Y2 => ABS_HAT2Y,
+			Hat::X3 => ABS_HAT3X,
+			Hat::Y3 => ABS_HAT3Y,
 		}
 	}
 }
@@ -169,9 +169,9 @@ custom_derive! {
 	}
 }
 
-impl Into<Event> for Digi {
-	fn into(self) -> Event {
-		Event::Absolute(Absolute::Digi(self))
+impl From<Digi> for Event {
+	fn from(val: Digi) -> Self {
+		Event::Absolute(Absolute::Digi(val))
 	}
 }
 
@@ -185,13 +185,13 @@ impl Kind for Digi {
 
 impl Code for Digi {
 	fn code(&self) -> c_int {
-		match self {
-			&Digi::Pressure  => ABS_PRESSURE,
-			&Digi::Distance  => ABS_DISTANCE,
-			&Digi::TiltX     => ABS_TILT_X,
-			&Digi::TiltY     => ABS_TILT_Y,
-			&Digi::ToolWidth => ABS_TOOL_WIDTH,
-			&Digi::Volume    => ABS_VOLUME,
+		match *self {
+			Digi::Pressure  => ABS_PRESSURE,
+			Digi::Distance  => ABS_DISTANCE,
+			Digi::TiltX     => ABS_TILT_X,
+			Digi::TiltY     => ABS_TILT_Y,
+			Digi::ToolWidth => ABS_TOOL_WIDTH,
+			Digi::Volume    => ABS_VOLUME,
 		}
 	}
 }
@@ -217,12 +217,6 @@ custom_derive! {
 	}
 }
 
-impl Into<Event> for Multi {
-	fn into(self) -> Event {
-		Event::Absolute(Absolute::Multi(self))
-	}
-}
-
 impl super::Position for Multi { }
 
 impl Kind for Multi {
@@ -233,22 +227,22 @@ impl Kind for Multi {
 
 impl Code for Multi {
 	fn code(&self) -> c_int {
-		match self {
-			&Multi::Slot        => ABS_MT_SLOT,
-			&Multi::TouchMajor  => ABS_MT_TOUCH_MAJOR,
-			&Multi::TouchMinor  => ABS_MT_TOUCH_MINOR,
-			&Multi::WidthMajor  => ABS_MT_WIDTH_MAJOR,
-			&Multi::WidthMinor  => ABS_MT_WIDTH_MINOR,
-			&Multi::Orientation => ABS_MT_ORIENTATION,
-			&Multi::PositionX   => ABS_MT_POSITION_X,
-			&Multi::PositionY   => ABS_MT_POSITION_Y,
-			&Multi::ToolType    => ABS_MT_TOOL_TYPE,
-			&Multi::BlobId      => ABS_MT_BLOB_ID,
-			&Multi::TrackingId  => ABS_MT_TRACKING_ID,
-			&Multi::Pressure    => ABS_MT_PRESSURE,
-			&Multi::Distance    => ABS_MT_DISTANCE,
-			&Multi::ToolX       => ABS_MT_TOOL_X,
-			&Multi::ToolY       => ABS_MT_TOOL_Y,
+		match *self {
+			Multi::Slot        => ABS_MT_SLOT,
+			Multi::TouchMajor  => ABS_MT_TOUCH_MAJOR,
+			Multi::TouchMinor  => ABS_MT_TOUCH_MINOR,
+			Multi::WidthMajor  => ABS_MT_WIDTH_MAJOR,
+			Multi::WidthMinor  => ABS_MT_WIDTH_MINOR,
+			Multi::Orientation => ABS_MT_ORIENTATION,
+			Multi::PositionX   => ABS_MT_POSITION_X,
+			Multi::PositionY   => ABS_MT_POSITION_Y,
+			Multi::ToolType    => ABS_MT_TOOL_TYPE,
+			Multi::BlobId      => ABS_MT_BLOB_ID,
+			Multi::TrackingId  => ABS_MT_TRACKING_ID,
+			Multi::Pressure    => ABS_MT_PRESSURE,
+			Multi::Distance    => ABS_MT_DISTANCE,
+			Multi::ToolX       => ABS_MT_TOOL_X,
+			Multi::ToolY       => ABS_MT_TOOL_Y,
 		}
 	}
 }

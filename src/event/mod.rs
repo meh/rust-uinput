@@ -41,26 +41,26 @@ pub enum Event {
 
 impl Kind for Event {
 	fn kind(&self) -> c_int {
-		match self {
-			&Event::All => unreachable!(),
+		match *self {
+			Event::All => unreachable!(),
 
-			&Event::Keyboard(ref v)   => v.kind(),
-			&Event::Controller(ref v) => v.kind(),
-			&Event::Relative(ref v)   => v.kind(),
-			&Event::Absolute(ref v)   => v.kind(),
+			Event::Keyboard(ref v)   => v.kind(),
+			Event::Controller(ref v) => v.kind(),
+			Event::Relative(ref v)   => v.kind(),
+			Event::Absolute(ref v)   => v.kind(),
 		}
 	}
 }
 
 impl Code for Event {
 	fn code(&self) -> c_int {
-		match self {
-			&Event::All => unreachable!(),
+		match *self {
+			Event::All => unreachable!(),
 
-			&Event::Keyboard(ref v)   => v.code(),
-			&Event::Controller(ref v) => v.code(),
-			&Event::Relative(ref v)   => v.code(),
-			&Event::Absolute(ref v)   => v.code(),
+			Event::Keyboard(ref v)   => v.code(),
+			Event::Controller(ref v) => v.code(),
+			Event::Relative(ref v)   => v.code(),
+			Event::Absolute(ref v)   => v.code(),
 		}
 	}
 }
